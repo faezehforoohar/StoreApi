@@ -1,0 +1,4 @@
+C:\Users\Faezeh\Desktop\AuthenticationApi\obj\Debug\netcoreapp3.1\AuthenticationApi.AssemblyInfoInputs.cache
+C:\Users\Faezeh\Desktop\AuthenticationApi\obj\Debug\netcoreapp3.1\AuthenticationApi.AssemblyInfo.cs
+C:\Users\Faezeh\Desktop\AuthenticationApi\obj\Debug\netcoreapp3.1\AuthenticationApi.csproj.CoreCompileInputs.cache
+C:\Users\Faezeh\Desktop\AuthenticationApi\obj\Debug\netcoreapp3.1\AuthenticationApi.MvcApplicationPartsAssemblyInfo.cache
