@@ -11,6 +11,7 @@ namespace StoreApi.Services
         User Authenticate(string username, string password);
         IEnumerable<User> GetAll();
         User GetById(int id);
+        User GetFirst();
         User Create(User user, string password);
         void Update(User user, string password = null);
         void Delete(int id);
@@ -47,6 +48,24 @@ namespace StoreApi.Services
         public IEnumerable<User> GetAll()
         {
             return _context.Users;
+        }
+
+        public User GetFirst()
+        {
+            if (_context.Users.FirstOrDefault() == null)
+            {
+                var user = new User()
+                {
+                    Username = "administrator",
+                    UserType = UserType.Administrator,
+                    FirstName = "Faezeh",
+                    LastName = "Foroohar"
+                };
+
+                Create(user, "123456");
+                return user;
+            }
+            else return _context.Users.FirstOrDefault();
         }
 
         public User GetById(int id)

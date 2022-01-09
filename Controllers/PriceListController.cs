@@ -13,22 +13,24 @@ using Microsoft.AspNetCore.Http;
 
 namespace StoreApi.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class PriceListController : ControllerBase
     {
         private IPriceListService _priceListService;
+        private IUserService _userService;
         private IMapper _mapper;
         private long _userId;
 
-        public PriceListController(
+        public PriceListController(IUserService userService,
             IPriceListService priceListService,
             IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _priceListService = priceListService;
             _mapper = mapper;
-            _userId = (httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) != null ? long.Parse(httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value) : 0);
+            _userService = userService;
+            _userId = _userService.GetFirst().Id;
+            //_userId = (httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) != null ? long.Parse(httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value) : 0);
         }
         [HttpGet]
         public async Task<ActionResult> GetAll()
@@ -62,15 +64,16 @@ namespace StoreApi.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult> Create([FromBody] PriceListSave model)
+        public async Task<ActionResult> Create([FromBody] PriceListCreate model)
         {
             try
             {
                 // map model to entity
                 if (_userId == 0)
                     throw new Exception("Authentication failed.");
-                model.UserId = _userId;
+                
                 var priceList = _mapper.Map<PriceList>(model);
+                priceList.UserId = _userId;
 
                 await _priceListService.Create(priceList);
                 var data = _mapper.Map<PriceListModel>(priceList);
@@ -84,14 +87,13 @@ namespace StoreApi.Controllers
         }
 
         [HttpPut("update")]
-        public async Task<ActionResult> Update([FromBody] PriceListSave model)
+        public async Task<ActionResult> Update([FromBody] PriceListUpdate model)
         {
             // map model to entity
             if (_userId == 0)
                 throw new Exception("Authentication failed.");
-            model.UserId = _userId;
             var priceList = _mapper.Map<PriceList>(model);
-
+            priceList.UserId = _userId;
             try
             {
                 // update priceList 

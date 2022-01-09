@@ -103,13 +103,13 @@ namespace StoreApi.Controllers
         public IActionResult GetAll()
         {
             //
-            var user = new User() { 
-            Username= "administrator",
-            UserType=UserType.Administrator,
-            FirstName="Faezeh",
-            LastName="Foroohar"
-            };
-            _userService.Create(user, "123456");
+            //var user = new User() { 
+            //Username= "administrator",
+            //UserType=UserType.Administrator,
+            //FirstName="Faezeh",
+            //LastName="Foroohar"
+            //};
+            //_userService.Create(user, "123456");
             //
 
             var users = _userService.GetAll();

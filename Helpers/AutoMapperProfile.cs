@@ -13,12 +13,17 @@ namespace StoreApi.Helpers
             CreateMap<User, UserModel>();
             CreateMap<RegisterModel, User>();
             CreateMap<UpdateModel, User>();
+            //
             CreateMap<PriceList, PriceListModel>();
             CreateMap<PriceListModel, PriceList>();
-            CreateMap<PriceListSave, PriceList>();
+            CreateMap<PriceListUpdate, PriceList>();
+            CreateMap<PriceListCreate, PriceList>();
+            //
             CreateMap<PriceListDModel, PriceListD>();
-            CreateMap<PriceListDSave, PriceListD>();
+            CreateMap<PriceListDUpdate, PriceListD>();
+            CreateMap<PriceListDCreate, PriceListD>();
             CreateMap<PriceListD, PriceListDModel>();
+
 
         }
     }

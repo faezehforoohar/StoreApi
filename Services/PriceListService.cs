@@ -24,7 +24,7 @@ namespace StoreApi.Services
         private DataContext _context;
         private IMapper _mapper;
 
-        public PriceListService(DataContext context, IMapper mapper)
+        public PriceListService(DataContext context, IMapper mapper , IUserService userService)
         {
             _context = context;
             _mapper = mapper;
@@ -42,6 +42,9 @@ namespace StoreApi.Services
 
         public async Task<int> Create(PriceList priceList)
         {
+            var user = _context.Users.FirstOrDefault();
+
+            if(user==null)
 
             if (string.IsNullOrWhiteSpace(priceList.Title))
                 throw new AppException("Title is required.");

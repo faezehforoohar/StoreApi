@@ -2,12 +2,10 @@
 
 namespace StoreApi.Models.PriceList
 {
-    public class PriceListSave
+    public class PriceListCreate
     {
-        public long Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime DateTime { get; set; }
-        public long UserId { get; set; }
     }
 }

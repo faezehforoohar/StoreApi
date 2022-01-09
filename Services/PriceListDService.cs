@@ -12,6 +12,7 @@ namespace StoreApi.Services
     public interface IPriceListDService
     {
         Task<List<PriceListD>> GetAll();
+        Task<List<PriceListD>> GetAllByPriceListId(long priceListId);
         Task<PriceListD> GetById(long id);
         Task<int> Create(PriceListD priceListD, long userId);
         Task<int> Update(PriceListD priceListD, long userId);
@@ -39,13 +40,19 @@ namespace StoreApi.Services
             return await _context.PriceListDs.Include(m => m.PriceList).ToListAsync();
         }
 
+        public async Task<List<PriceListD>> GetAllByPriceListId(long priceListId)
+        {
+            return await _context.PriceListDs.Include(m => m.PriceList).Where(m=>m.PriceListId==priceListId).ToListAsync();
+        }
+
         public async Task<int> Create(PriceListD priceListD, long userId)
         {
-
             if (string.IsNullOrWhiteSpace(priceListD.Title))
                 throw new AppException("Title is required.");
             if (priceListD.PriceListId == 0)
                 throw new AppException("PriceListId is required.");
+            if(_context.PriceLists.FirstOrDefault(m=>m.Id==priceListD.PriceListId)==null)
+                throw new AppException("PriceListId is invalid.");
             priceListD.CreatorUserId = userId;
             priceListD.CreationTime = DateTime.Now;
 
@@ -65,6 +72,8 @@ namespace StoreApi.Services
                 throw new AppException("Title is required.");
             if (priceListDParam.PriceListId ==0)
                 throw new AppException("PriceListId is required.");
+            if (_context.PriceLists.FirstOrDefault(m => m.Id == priceListDParam.PriceListId) == null)
+                throw new AppException("PriceListId is invalid.");
             priceListD.Title = priceListDParam.Title;
             priceListD.PriceListId = priceListDParam.PriceListId;
             priceListD.Price = priceListDParam.PriceListId;

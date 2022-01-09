@@ -13,25 +13,27 @@ using Microsoft.AspNetCore.Http;
 
 namespace StoreApi.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class PriceListDController : ControllerBase
     {
         private IPriceListDService _priceListDService;
+        private IUserService _userService;
         private IMapper _mapper;
         private long _userId;
 
-        public PriceListDController(
-            IPriceListDService priceListDService,
-            IMapper mapper, IHttpContextAccessor httpContextAccessor)
+
+        public PriceListDController(IUserService userService,
+    IPriceListDService priceListDService,
+    IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _priceListDService = priceListDService;
             _mapper = mapper;
-            _userId = (httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) != null ? long.Parse(httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value) : 0);
+            _userService = userService;
+            _userId = _userService.GetFirst().Id;
+            //_userId = (httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) != null ? long.Parse(httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value) : 0);
         }
         [HttpGet]
-        [Authorize(Roles = "Administrator,Admin")]
         public async Task<ActionResult> GetAll()
         {
             try
@@ -48,7 +50,6 @@ namespace StoreApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Administrator,Admin")]
         public async Task<ActionResult> GetById(int id)
         {
             try
@@ -63,9 +64,24 @@ namespace StoreApi.Controllers
             }
         }
 
+        [HttpGet("getByPriceListId/{id}")]
+        public async Task<ActionResult> GetByPriceListId(int id)
+        {
+            try
+            {
+                var priceListDs = await _priceListDService.GetAllByPriceListId(id);
+                var data = _mapper.Map<IList<PriceListDModel>>(priceListDs);
+
+                return Ok(new { data, result = true });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { message = "Error in fetching data :" + ex.Message, result = false });
+            }
+        }
+
         [HttpPost("create")]
-        [Authorize(Roles = "Administrator,Admin")]
-        public async Task<ActionResult> Create([FromBody] PriceListDSave model)
+        public async Task<ActionResult> Create([FromBody] PriceListDCreate model)
         {
             try
             {
@@ -74,7 +90,7 @@ namespace StoreApi.Controllers
                     throw new Exception("Authentication failed.");
                 var priceListD = _mapper.Map<PriceListD>(model);
 
-                await _priceListDService.Create(priceListD, _userId);
+                var result = await _priceListDService.Create(priceListD, _userId);
                 var data = _mapper.Map<PriceListDModel>(priceListD);
                 return Ok(new { data, result = true });
             }
@@ -86,8 +102,7 @@ namespace StoreApi.Controllers
         }
 
         [HttpPut("update")]
-        [Authorize(Roles = "Administrator,Admin")]
-        public async Task<ActionResult> Update([FromBody] PriceListDSave model)
+        public async Task<ActionResult> Update([FromBody] PriceListDUpdate model)
         {
             // map model to entity
             if (_userId == 0)
@@ -110,7 +125,6 @@ namespace StoreApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Administrator,Admin")]
         public async Task<ActionResult> Delete(int id)
         {
             if (_userId == 0)
