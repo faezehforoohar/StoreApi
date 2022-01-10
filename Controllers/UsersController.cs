@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using StoreApi.Services;
 using StoreApi.Entities;
 using StoreApi.Models.Users;
+using System.Threading.Tasks;
 
 namespace StoreApi.Controllers
 {
@@ -36,7 +37,7 @@ namespace StoreApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] AuthenticateModel model)
+        public async Task<ActionResult> Authenticate([FromBody] AuthenticateModel model)
         {
             try
             {
@@ -70,86 +71,85 @@ namespace StoreApi.Controllers
                     UserType = user.UserType,
                     Token = tokenString
                 };
-                return Ok(new { userResult, result = true });
+                return Ok(new Result<UserResult>(userResult, true, SuccessType.Login.ToDescription(), new Error()));
             }
             catch (Exception ex)
             {
-                return Ok(new { message = "Error in authenticating :" + ex.Message, result = false });
+                return Ok(new
+                {
+                    message = ErrorType.Login.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
             }
         }
 
-        [AllowAnonymous]
-        [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterModel model)
-        {
-            // map model to entity
-            var user = _mapper.Map<User>(model);
+        //[AllowAnonymous]
+        //[HttpPost("register")]
+        //public IActionResult Register([FromBody] RegisterModel model)
+        //{
+        //    // map model to entity
+        //    var user = _mapper.Map<User>(model);
 
-            try
-            {
-                // create user
-                _userService.Create(user, model.Password);
-                return Ok();
-            }
-            catch (AppException ex)
-            {
-                // return error message if there was an exception
-                return Ok(new { message = "Error in registering :" + ex.Message, result = false });
-            }
-        }
+        //    try
+        //    {
+        //        // create user
+        //        _userService.Create(user, model.Password);
+        //        return Ok();
+        //    }
+        //    catch (AppException ex)
+        //    {
+        //        // return error message if there was an exception
+        //        return Ok(new { message = "Error in registering :" + ex.Message, success = false });
+        //    }
+        //}
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult GetAll()
-        {
-            //
-            //var user = new User() { 
-            //Username= "administrator",
-            //UserType=UserType.Administrator,
-            //FirstName="Faezeh",
-            //LastName="Foroohar"
-            //};
-            //_userService.Create(user, "123456");
-            //
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public IActionResult GetAll()
+        //{
+        //    var users = _userService.GetAll();
+        //    var model = _mapper.Map<IList<UserModel>>(users);
+        //    return Ok(model);
+        //}
 
-            var users = _userService.GetAll();
-            var model = _mapper.Map<IList<UserModel>>(users);
-            return Ok(model);
-        }
+        //[HttpGet("{id}")]
+        //public IActionResult GetById(int id)
+        //{
+        //    var user = _userService.GetById(id);
+        //    var model = _mapper.Map<UserModel>(user);
+        //    return Ok(model);
+        //}
 
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
-        {
-            var user = _userService.GetById(id);
-            var model = _mapper.Map<UserModel>(user);
-            return Ok(model);
-        }
+        //[HttpPut("{id}")]
+        //public IActionResult Update(int id, [FromBody] UpdateModel model)
+        //{
+        //    // map model to entity and set id
+        //    var user = _mapper.Map<User>(model);
+        //    user.Id = id;
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] UpdateModel model)
-        {
-            // map model to entity and set id
-            var user = _mapper.Map<User>(model);
-            user.Id = id;
+        //    try
+        //    {
+        //        // update user 
+        //        _userService.Update(user, model.Password);
+        //        return Ok();
+        //    }
+        //    catch (AppException ex)
+        //    {
+        //        // return error message if there was an exception
+        //        return BadRequest(new { message = ex.Message });
+        //    }
+        //}
 
-            try
-            {
-                // update user 
-                _userService.Update(user, model.Password);
-                return Ok();
-            }
-            catch (AppException ex)
-            {
-                // return error message if there was an exception
-                return BadRequest(new { message = ex.Message });
-            }
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            _userService.Delete(id);
-            return Ok();
-        }
+        //[HttpDelete("{id}")]
+        //public IActionResult Delete(int id)
+        //{
+        //    _userService.Delete(id);
+        //    return Ok();
+        //}
     }
 }

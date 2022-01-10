@@ -39,13 +39,24 @@ namespace StoreApi.Controllers
             try
             {
                 var priceListDs = await _priceListDService.GetAll();
-                var data = _mapper.Map<IList<PriceListDModel>>(priceListDs);
+                var data = _mapper.Map<List<PriceListDModel>>(priceListDs);
+                int i = 1;
 
-                return Ok(new { data, result = true });
+                data.ForEach(m => m.Row = i++);
+                return Ok(new Result<List<PriceListDModel>>(data, true, SuccessType.Fetch.ToDescription(), new Error()));
             }
             catch (Exception ex)
             {
-                return Ok(new { message = "Error in fetching data :" + ex.Message, result = false });
+                return Ok(new
+                {
+                    message = "Error in fetching data :" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
             }
         }
 
@@ -56,11 +67,23 @@ namespace StoreApi.Controllers
             {
                 var priceListD = await _priceListDService.GetById(id);
                 var data = _mapper.Map<PriceListDModel>(priceListD);
-                return Ok(new { data, result = true });
+                //return Ok(new { data = data, success = true });
+                return Ok(new Result<PriceListDModel>(data, true, SuccessType.Fetch.ToDescription(), new Error()));
+
             }
             catch (Exception ex)
             {
-                return Ok(new { message = "Error in fetching data :" + ex.Message, result = false });
+                return Ok(new
+                {
+                    message = ErrorType.Fetch.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
+                //return Ok(new { message = "Error in fetching data :" + ex.Message, success = false, error = "" });
             }
         }
 
@@ -70,13 +93,23 @@ namespace StoreApi.Controllers
             try
             {
                 var priceListDs = await _priceListDService.GetAllByPriceListId(id);
-                var data = _mapper.Map<IList<PriceListDModel>>(priceListDs);
+                var data = _mapper.Map<List<PriceListDModel>>(priceListDs);
 
-                return Ok(new { data, result = true });
+                return Ok(new Result<List<PriceListDModel>>(data, true, SuccessType.Fetch.ToDescription(), new Error()));
             }
             catch (Exception ex)
             {
-                return Ok(new { message = "Error in fetching data :" + ex.Message, result = false });
+                return Ok(new
+                {
+                    message = ErrorType.Fetch.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
+                // return Ok(new { message = "Error in fetching data :" + ex.Message, success = false, error = "" });
             }
         }
 
@@ -92,12 +125,22 @@ namespace StoreApi.Controllers
 
                 var result = await _priceListDService.Create(priceListD, _userId);
                 var data = _mapper.Map<PriceListDModel>(priceListD);
-                return Ok(new { data, result = true });
+                return Ok(new Result<PriceListDModel>(data, true, SuccessType.Create.ToDescription(), new Error()));
             }
             catch (AppException ex)
             {
                 // return error message if there was an exception
-                return Ok(new { message = "Error in creating data :" + ex.Message, result = false });
+                //return Ok(new { message = "Error in creating data :" + ex.Message, success = false, error = "" });
+                return Ok(new
+                {
+                    message = ErrorType.Create.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
             }
         }
 
@@ -115,12 +158,22 @@ namespace StoreApi.Controllers
                 await _priceListDService.Update(priceListD, _userId);
                 var data = _mapper.Map<PriceListDModel>(priceListD);
 
-                return Ok(new { data, result = true });
+                return Ok(new Result<PriceListDModel>(data, true, SuccessType.Update.ToDescription(), new Error()));
             }
             catch (AppException ex)
             {
                 // return error message if there was an exception
-                return Ok(new { message = "Error in updating data :" + ex.Message, result = false });
+                //return Ok(new { message = "Error in updating data :" + ex.Message, success = false, error = "" });
+                return Ok(new
+                {
+                    message = ErrorType.Update.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
             }
         }
 
@@ -134,12 +187,24 @@ namespace StoreApi.Controllers
                 // update priceListD 
                 await _priceListDService.Delete(id);
 
-                return Ok(new { result = true });
+                //return Ok(new { success = true, message = "Delete successfully", error = "" });
+                return Ok(new Result<string>(true, SuccessType.Delete.ToDescription(), new Error()));
+
             }
             catch (AppException ex)
             {
                 // return error message if there was an exception
-                return Ok(new { message = "Error in updating data :" + ex.Message, result = false });
+                //return Ok(new { message = "Error in updating data :" + ex.Message, success = false, error = "" });
+                return Ok(new
+                {
+                    message = ErrorType.Delete.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
             }
         }
 

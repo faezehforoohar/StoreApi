@@ -38,13 +38,25 @@ namespace StoreApi.Controllers
             try
             {
                 var priceLists = await _priceListService.GetAll();
-                var data = _mapper.Map<IList<PriceListModel>>(priceLists);
+                var data = _mapper.Map<List<PriceListModel>>(priceLists);
+                int i = 1;
 
-                return Ok(new { data, result = true });
+                data.ForEach(m => m.Row = i++);
+                return Ok(new Result<List<PriceListModel>>(data, true, SuccessType.Fetch.ToDescription(), new Error()));
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return Ok(new { message = "Error in fetching data :" + ex.Message, result = false });
+                return Ok(new
+                {
+                    message = ErrorType.Fetch.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
             }
         }
 
@@ -55,11 +67,21 @@ namespace StoreApi.Controllers
             {
                 var priceList = await _priceListService.GetById(id);
                 var data = _mapper.Map<PriceListModel>(priceList);
-                return Ok(new { data, result = true });
+                return Ok(new Result<PriceListModel>(data, true, SuccessType.Fetch.ToDescription(), new Error()));
+
             }
             catch (Exception ex)
             {
-                return Ok(new { message = "Error in fetching data :" + ex.Message, result = false });
+                return Ok(new
+                {
+                    message = ErrorType.Fetch.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
             }
         }
 
@@ -71,18 +93,27 @@ namespace StoreApi.Controllers
                 // map model to entity
                 if (_userId == 0)
                     throw new Exception("Authentication failed.");
-                
+
                 var priceList = _mapper.Map<PriceList>(model);
                 priceList.UserId = _userId;
 
                 await _priceListService.Create(priceList);
                 var data = _mapper.Map<PriceListModel>(priceList);
-                return Ok(new { data, result = true });
+                return Ok(new Result<PriceListModel>(data, true, SuccessType.Create.ToDescription(), new Error()));
             }
             catch (AppException ex)
             {
                 // return error message if there was an exception
-                return Ok(new { message = "Error in creating data :" + ex.Message, result = false });
+                return Ok(new
+                {
+                    message = ErrorType.Create.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
             }
         }
 
@@ -100,12 +131,20 @@ namespace StoreApi.Controllers
                 await _priceListService.Update(priceList);
                 var data = _mapper.Map<PriceListModel>(priceList);
 
-                return Ok(new { data, result = true });
+                return Ok(new Result<PriceListModel>(data, true, SuccessType.Update.ToDescription(), new Error()));
             }
             catch (AppException ex)
             {
-                // return error message if there was an exception
-                return Ok(new { message = "Error in updating data :" + ex.Message, result = false });
+                return Ok(new
+                {
+                    message = ErrorType.Update.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
             }
         }
 
@@ -119,12 +158,20 @@ namespace StoreApi.Controllers
                 // update priceList 
                 await _priceListService.Delete(id);
 
-                return Ok(new { result = true });
+                return Ok(new Result<string>(true, SuccessType.Delete.ToDescription(), new Error()));
             }
             catch (AppException ex)
             {
-                // return error message if there was an exception
-                return Ok(new { message = "Error in updating data :" + ex.Message, result = false });
+                return Ok(new
+                {
+                    message = ErrorType.Delete.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
             }
         }
 
