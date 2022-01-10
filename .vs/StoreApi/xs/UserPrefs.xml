@@ -3,9 +3,9 @@
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="StoreApi" expanded="True">
+          <Node name="StoreApi" expanded="True" selected="True">
             <Node name="StoreApi" expanded="True">
-              <Node name="appsettings.json" selected="True" />
+              <Node name="Dependencies" expanded="True" />
             </Node>
           </Node>
         </State>
