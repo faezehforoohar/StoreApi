@@ -6,6 +6,6 @@ namespace StoreApi.Models.PriceList
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime DateTime { get; set; }
+        public string DateTime { get; set; }
     }
 }

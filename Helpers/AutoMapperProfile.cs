@@ -14,10 +14,13 @@ namespace StoreApi.Helpers
             CreateMap<RegisterModel, User>();
             CreateMap<UpdateModel, User>();
             //
-            CreateMap<PriceList, PriceListModel>();
+            CreateMap<PriceList, PriceListModel>()
+                 .ForMember(x => x.DateTime, opt => opt.MapFrom(o => o.DateTime.ToPersianDate()));
             CreateMap<PriceListModel, PriceList>();
-            CreateMap<PriceListUpdate, PriceList>();
-            CreateMap<PriceListCreate, PriceList>();
+            CreateMap<PriceListUpdate, PriceList>()
+                 .ForMember(x => x.DateTime, opt => opt.MapFrom(o => o.DateTime.ToDateTime()));
+            CreateMap<PriceListCreate, PriceList>()
+                   .ForMember(x => x.DateTime, opt => opt.MapFrom(o => o.DateTime.ToDateTime()));
             //
             CreateMap<PriceListDModel, PriceListD>();
             CreateMap<PriceListDUpdate, PriceListD>();
