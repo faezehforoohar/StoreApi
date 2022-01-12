@@ -22,10 +22,11 @@ namespace StoreApi.Helpers
             CreateMap<PriceListCreate, PriceList>()
                    .ForMember(x => x.DateTime, opt => opt.MapFrom(o => o.DateTime.ToDateTime()));
             //
+            CreateMap<PriceListD, PriceListDModel>();
             CreateMap<PriceListDModel, PriceListD>();
             CreateMap<PriceListDUpdate, PriceListD>();
             CreateMap<PriceListDCreate, PriceListD>();
-            CreateMap<PriceListD, PriceListDModel>();
+
 
 
         }

@@ -30,7 +30,15 @@ namespace StoreApi
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddDbContext<DataContext>();
-            services.AddCors();
+            services.AddCors(options =>
+            {
+
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader());
+            });
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             //services.AddSwaggerGen(c =>
@@ -127,10 +135,7 @@ namespace StoreApi
             app.UseRouting();
 
             // global cors policy
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

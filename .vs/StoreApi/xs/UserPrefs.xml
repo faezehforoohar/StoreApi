@@ -3,16 +3,14 @@
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="StoreApi" expanded="True" selected="True">
+          <Option id="ShowAllFiles" value="True" />
+          <Node name="StoreApi" expanded="True">
             <Node name="StoreApi" expanded="True">
-              <Node name="Dependencies" expanded="True" />
+              <Node name="Migrations" expanded="True">
+                <Node name="DataContextModelSnapshot.cs" selected="True" />
+              </Node>
             </Node>
           </Node>
-        </State>
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State>
-          <Value>color</Value>
         </State>
       </Pad>
     </Pads>
@@ -22,7 +20,9 @@
   <MonoDevelop.Ide.ItemProperties.StoreApi PreferredExecutionTarget="/Applications/Google Chrome.app" />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/faezeh/Projects/StoreApi/Controllers/PriceListController.cs" relfile="Controllers/PriceListController.cs" line="87" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>

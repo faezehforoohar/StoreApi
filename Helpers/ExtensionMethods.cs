@@ -95,5 +95,64 @@ namespace StoreApi.Helpers
             return calender.ToDateTime(year, month, day, 0, 0, 0, 0);
 
         }
+        public static bool CheckDate(this string PersianDate, ref string error)
+        {
+            int year, month, day;
+
+            try
+            {
+                PersianDate = PersianDate.Replace(" ", "");
+                year = int.Parse(PersianDate.Substring(0, 4));
+                month = int.Parse(PersianDate.Substring(5, 2));
+                day = int.Parse(PersianDate.Substring(8, 2));
+            }
+            catch
+            {
+                error = "فرمت تاریخ اشتباه است";
+                return false;
+            }
+            if (month > 12 || month < 01)
+            {
+                error = "ماه اشتباه است";
+                return false;
+            }
+            if (day > 31 || day < 01)
+            {
+                error = " روز اشتباه است";
+                return false;
+            }
+            System.Globalization.PersianCalendar PCalendar = new System.Globalization.PersianCalendar();
+
+            if (!PCalendar.IsLeapYear(year))
+            {
+                if (month == 12 && day >= 30)
+                {
+                    error = " روز اشتباه است";
+                    return false;
+                }
+            }
+            ///
+
+            ///Year is  Leap.
+
+            ///
+            if (PCalendar.IsLeapYear(year))
+            {
+                if (month == 12 && day > 30)
+                {
+                    error = " روز اشتباه است";
+                    return false;
+                }
+            }
+            if (((month >= 1 && month <= 6 && day >= 1 && day <= 31) ||
+
+                (month >= 7 && month <= 12 && day >= 1 && day <= 30)) == false)
+            {
+
+                error = " تعداد روز اشتباه است";
+                return false;
+            }
+            return true;
+        }
     }
 }

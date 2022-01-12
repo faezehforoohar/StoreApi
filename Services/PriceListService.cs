@@ -7,16 +7,18 @@ using Microsoft.EntityFrameworkCore;
 using StoreApi.Entities;
 using StoreApi.Helpers;
 using StoreApi.Models.PriceList;
+using static StoreApi.Helpers.Enums;
 
 namespace StoreApi.Services
 {
     public interface IPriceListService
     {
-        Task<List<PriceList>> GetAll();
+        Task<List<PriceList>> GetAll(string sortType);
         Task<PriceList> GetById(long id);
         Task<int> Create(PriceList priceList);
         Task<int> Update(PriceList priceList);
         Task<int> Delete(long id);
+        Task<bool> SendMessage(string date);
     }
 
     public class PriceListService : IPriceListService
@@ -24,7 +26,7 @@ namespace StoreApi.Services
         private DataContext _context;
         private IMapper _mapper;
 
-        public PriceListService(DataContext context, IMapper mapper , IUserService userService)
+        public PriceListService(DataContext context, IMapper mapper, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
@@ -35,19 +37,22 @@ namespace StoreApi.Services
             return await _context.PriceLists.FindAsync(id);
         }
 
-        public async Task<List<PriceList>> GetAll()
+        public async Task<List<PriceList>> GetAll(string sortType)
         {
-            return await _context.PriceLists.ToListAsync();
+            if (sortType == SortType.asc.ToDescription())
+                return await _context.PriceLists.OrderBy(m => m.DateTime).ToListAsync();
+            else
+                return await _context.PriceLists.OrderByDescending(m => m.DateTime).ToListAsync();
         }
 
         public async Task<int> Create(PriceList priceList)
         {
             var user = _context.Users.FirstOrDefault();
 
-            if(user==null)
+            if (user == null)
 
-            if (string.IsNullOrWhiteSpace(priceList.Title))
-                throw new AppException("Title is required.");
+                if (string.IsNullOrWhiteSpace(priceList.Title))
+                    throw new AppException("Title is required.");
             if (priceList.DateTime == null)
                 throw new AppException("DateTime is required.");
             priceList.CreatorUserId = priceList.UserId;
@@ -93,5 +98,9 @@ namespace StoreApi.Services
             return await _context.SaveChangesAsync();
         }
 
+        public async Task<bool> SendMessage(string date)
+        {
+            return true;
+        }
     }
 }

@@ -77,10 +77,10 @@ namespace StoreApi.Services
             priceListD.Title = priceListDParam.Title;
             priceListD.PriceListId = priceListDParam.PriceListId;
             priceListD.Price = priceListDParam.PriceListId;
-            priceListD.PortNumber = priceListDParam.PortNumber;
+            priceListD.PartNumber = priceListDParam.PartNumber;
             priceListD.Color = priceListDParam.Color;
             priceListD.HasGuarantee = priceListDParam.HasGuarantee;
-            priceListD.YearModel = priceListDParam.YearModel;
+            priceListD.YearModel= priceListDParam.YearModel;
             priceListD.Description = priceListDParam.Description;
 
             priceListD.LastModifierUserId = userId;

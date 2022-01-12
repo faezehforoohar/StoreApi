@@ -10,8 +10,8 @@ using StoreApi.Helpers;
 namespace StoreApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220108193508_Mig02")]
-    partial class Mig02
+    [Migration("20220112113951_Mig11")]
+    partial class Mig11
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -135,72 +135,6 @@ namespace StoreApi.Migrations
                     b.ToTable("PriceLists");
                 });
 
-            modelBuilder.Entity("StoreApi.Entities.PriceListD", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Color")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("HasGuarantee")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("PartNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("Price")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PriceListId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("TimeStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("YearModel")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PriceListId");
-
-                    b.ToTable("PriceListDs");
-                });
-
             modelBuilder.Entity("StoreApi.Entities.User", b =>
                 {
                     b.Property<long>("Id")
@@ -279,17 +213,6 @@ namespace StoreApi.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("StoreApi.Entities.PriceListD", b =>
-                {
-                    b.HasOne("StoreApi.Entities.PriceList", "PriceList")
-                        .WithMany()
-                        .HasForeignKey("PriceListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PriceList");
                 });
 #pragma warning restore 612, 618
         }

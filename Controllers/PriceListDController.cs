@@ -10,6 +10,7 @@ using StoreApi.Entities;
 using StoreApi.Models.PriceListD;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
 
 namespace StoreApi.Controllers
 {
@@ -113,6 +114,35 @@ namespace StoreApi.Controllers
             }
         }
 
+        [HttpGet("getColors")]
+        public async Task<ActionResult> GetColors()
+        {
+            try
+            {
+                List<Option> data = new List<Option>();
+
+                data.Add(new Option() { Value = Color.Black.ToID(), Title = Color.Black.ToDescription() });
+                data.Add(new Option() { Value = Color.Blue.ToID(), Title = Color.Blue.ToDescription() });
+                data.Add(new Option() { Value = Color.BlueBlack.ToID(), Title = Color.BlueBlack.ToDescription() });
+                data.Add(new Option() { Value = Color.White.ToID(), Title = Color.White.ToDescription() });
+
+                return Ok(new Result<List<Option>>(data, true, SuccessType.Fetch.ToDescription(), new Error()));
+            }
+            catch (Exception ex)
+            {
+                return Ok(new
+                {
+                    message = ErrorType.Fetch.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
+            }
+        }
+
         [HttpPost("create")]
         public async Task<ActionResult> Create([FromBody] PriceListDCreate model)
         {
@@ -207,6 +237,7 @@ namespace StoreApi.Controllers
                 });
             }
         }
+
 
     }
 }

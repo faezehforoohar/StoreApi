@@ -173,7 +173,7 @@ namespace StoreApi.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("PortNumber")
+                    b.Property<string>("PartNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Price")
@@ -189,8 +189,8 @@ namespace StoreApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("YearModel")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("YearModel")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

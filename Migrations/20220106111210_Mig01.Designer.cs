@@ -175,7 +175,7 @@ namespace StoreApi.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("PortNumber")
+                    b.Property<string>("PartNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Price")

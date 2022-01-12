@@ -10,8 +10,8 @@ using StoreApi.Helpers;
 namespace StoreApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220108193508_Mig02")]
-    partial class Mig02
+    [Migration("20220112114124_Mig12")]
+    partial class Mig12
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -191,8 +191,8 @@ namespace StoreApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("YearModel")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("YearModel")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

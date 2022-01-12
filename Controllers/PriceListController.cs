@@ -10,6 +10,10 @@ using StoreApi.Entities;
 using StoreApi.Models.PriceList;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using static StoreApi.Helpers.Enums;
+//using Twilio;
+//using Twilio.Rest.Api.V2010.Account;
+//using Twilio.Types;
 
 namespace StoreApi.Controllers
 {
@@ -32,12 +36,30 @@ namespace StoreApi.Controllers
             _userId = _userService.GetFirst().Id;
             //_userId = (httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier) != null ? long.Parse(httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value) : 0);
         }
-        [HttpGet]
-        public async Task<ActionResult> GetAll()
+        [HttpGet("getAll/{sort}")]
+        public async Task<ActionResult> GetAll(string sort = "asc")
         {
             try
             {
-                var priceLists = await _priceListService.GetAll();
+                /////
+                ///        // Find your Account SID and Auth Token at twilio.com/console
+                // and set the environment variables. See http://twil.io/secure
+                //string accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
+                //string authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN");
+
+                //TwilioClient.Init(accountSid, authToken);
+                //TwilioClient.Init("AC8d721852ccbcf690587c6d3ef35eb34b", "d1604bd9238dd7b225539ab66ee044ff");
+
+
+                //var message = MessageResource.Create(
+                //               from: new PhoneNumber("whatsapp:+989355242297"),
+                //               to: new PhoneNumber("whatsapp:+989011312651"),
+                //               body: "Ahoy from Twilio!"
+                //           );
+
+
+
+                var priceLists = await _priceListService.GetAll(sort);
                 var data = _mapper.Map<List<PriceListModel>>(priceLists);
                 int i = 1;
 
@@ -165,6 +187,39 @@ namespace StoreApi.Controllers
                 return Ok(new
                 {
                     message = ErrorType.Delete.ToDescription() + ":" + ex.Message,
+                    success = false,
+                    error = new Error()
+                    {
+                        code = 1,
+                        data = new List<string>()
+                    }
+                });
+            }
+        }
+
+        [HttpPost("sendMessage")]
+        public async Task<ActionResult> SendMessage([FromBody] string date)
+        {
+            string error = string.Empty;
+
+            if (string.IsNullOrEmpty(date))
+                throw new Exception("Authentication failed.");
+            if (!date.CheckDate(ref error))
+                throw new Exception(error);
+            try
+            {
+                // update priceListD 
+                await _priceListService.SendMessage(date);
+
+                return Ok(new Result<string>(true, SuccessType.SendingMessage.ToDescription(), new Error()));
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                //return Ok(new { message = "Error in updating data :" + ex.Message, success = false, error = "" });
+                return Ok(new
+                {
+                    message = ErrorType.SendingMessage.ToDescription() + ":" + ex.Message,
                     success = false,
                     error = new Error()
                     {

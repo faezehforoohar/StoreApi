@@ -15,9 +15,11 @@ namespace StoreApi.Entities
 
         public long Price { get; set; }
 
-        public string PortNumber { get; set; }
+        public string PartNumber { get; set; }
 
-        public DateTime YearModel { get; set; }
+
+        public int YearModel { get; set; }
+
 
         public Color Color { get; set; }
 

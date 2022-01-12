@@ -44,6 +44,8 @@ namespace StoreApi.Helpers
         Login = 4,
         [Description("Fetch Error")]
         Fetch = 5,
+        [Description("Sending Message Error")]
+        SendingMessage = 6,
     }
     public enum SuccessType
     {
@@ -57,6 +59,8 @@ namespace StoreApi.Helpers
         Login = 4,
         [Description("Fetch Success")]
         Fetch = 5,
-     
+        [Description("Sending Message Success")]
+        SendingMessage = 6,
+
     }
 }
