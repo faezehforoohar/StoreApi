@@ -11,7 +11,9 @@ using StoreApi.Models.PriceList;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using static StoreApi.Helpers.Enums;
-//using Twilio;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 //using Twilio.Rest.Api.V2010.Account;
 //using Twilio.Types;
 
@@ -41,21 +43,21 @@ namespace StoreApi.Controllers
         {
             try
             {
-                /////
-                ///        // Find your Account SID and Auth Token at twilio.com/console
-                // and set the environment variables. See http://twil.io/secure
-                //string accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
-                //string authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN");
+                ///
+                // Find your Account SID and Auth Token at twilio.com/console
+                 //and set the environment variables. See http://twil.io/secure
+                string accountSid = Environment.GetEnvironmentVariable("AC277cf3d34498f7d6bea3f979ac8a659c");
+                string authToken = Environment.GetEnvironmentVariable("a722c399ecad0ec0fc69b2a394ee51ef");
 
-                //TwilioClient.Init(accountSid, authToken);
-                //TwilioClient.Init("AC8d721852ccbcf690587c6d3ef35eb34b", "d1604bd9238dd7b225539ab66ee044ff");
+                TwilioClient.Init(accountSid, authToken);
+               // TwilioClient.Init("AC8d721852ccbcf690587c6d3ef35eb34b", "d1604bd9238dd7b225539ab66ee044ff");
 
 
-                //var message = MessageResource.Create(
-                //               from: new PhoneNumber("whatsapp:+989355242297"),
-                //               to: new PhoneNumber("whatsapp:+989011312651"),
-                //               body: "Ahoy from Twilio!"
-                //           );
+                var message = MessageResource.Create(
+                               from: new PhoneNumber("whatsapp:+989355242297"),
+                               to: new PhoneNumber("whatsapp:+989011312651"),
+                               body: "Ahoy from Twilio!"
+                           );
 
 
 
@@ -198,18 +200,18 @@ namespace StoreApi.Controllers
         }
 
         [HttpPost("sendMessage")]
-        public async Task<ActionResult> SendMessage([FromBody] string date)
+        public async Task<ActionResult> SendMessage(long priceListId)
         {
             string error = string.Empty;
 
-            if (string.IsNullOrEmpty(date))
-                throw new Exception("Authentication failed.");
-            if (!date.CheckDate(ref error))
-                throw new Exception(error);
+            //if (string.IsNullOrEmpty(date))
+            //    throw new Exception("Authentication failed.");
+            //if (!date.CheckDate(ref error))
+            //    throw new Exception(error);
             try
             {
                 // update priceListD 
-                await _priceListService.SendMessage(date);
+                await _priceListService.SendMessage(priceListId);
 
                 return Ok(new Result<string>(true, SuccessType.SendingMessage.ToDescription(), new Error()));
             }

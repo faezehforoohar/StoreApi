@@ -3,12 +3,15 @@
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Option id="ShowAllFiles" value="True" />
           <Node name="StoreApi" expanded="True">
             <Node name="StoreApi" expanded="True">
-              <Node name="Migrations" expanded="True">
-                <Node name="DataContextModelSnapshot.cs" selected="True" />
+              <Node name="Dependencies" expanded="True">
+                <Node name="PackageDependencies" expanded="True" />
               </Node>
+              <Node name="Controllers" expanded="True">
+                <Node name="PriceListController.cs" selected="True" />
+              </Node>
+              <Node name="Services" expanded="True" />
             </Node>
           </Node>
         </State>
@@ -21,7 +24,8 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/faezeh/Projects/StoreApi/Controllers/PriceListController.cs" relfile="Controllers/PriceListController.cs" line="87" column="1" />
+      <Breakpoint file="/Users/faezeh/Projects/StoreApi/Controllers/PriceListController.cs" relfile="Controllers/PriceListController.cs" line="89" column="1" />
+      <Breakpoint file="/Users/faezeh/Projects/StoreApi/Controllers/PriceListController.cs" relfile="Controllers/PriceListController.cs" line="49" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />

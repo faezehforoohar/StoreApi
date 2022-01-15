@@ -18,7 +18,7 @@ namespace StoreApi.Services
         Task<int> Create(PriceList priceList);
         Task<int> Update(PriceList priceList);
         Task<int> Delete(long id);
-        Task<bool> SendMessage(string date);
+        Task<bool> SendMessage(long priceListId);
     }
 
     public class PriceListService : IPriceListService
@@ -98,8 +98,12 @@ namespace StoreApi.Services
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> SendMessage(string date)
+        public async Task<bool> SendMessage(long priceListId)
         {
+            var priceList = _context.PriceLists.Find(priceListId);
+
+            if (priceList == null)
+                throw new AppException("PriceList not found");
             return true;
         }
     }
